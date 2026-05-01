@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import { Clock, CheckCircle2, CircleDashed } from 'lucide-react';
+import { Clock, CheckCircle2, CircleDashed, AlertCircle } from 'lucide-react';
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -37,6 +37,7 @@ export default function Dashboard() {
   const todoCount = myTasks.filter(t => t.status === 'Todo').length;
   const progressCount = myTasks.filter(t => t.status === 'In Progress').length;
   const doneCount = myTasks.filter(t => t.status === 'Done').length;
+  const overdueCount = myTasks.filter(t => t.status === 'Overdue' || (t.status !== 'Done' && t.due_date && new Date(t.due_date) < new Date())).length;
 
   return (
     <div className="container">
@@ -54,6 +55,10 @@ export default function Dashboard() {
         <div className="glass-card flex-1" style={{ borderLeft: '4px solid var(--success)' }}>
           <div className="text-muted mb-2 flex items-center gap-2"><CheckCircle2 size={18} /> Done</div>
           <h2>{doneCount}</h2>
+        </div>
+        <div className="glass-card flex-1" style={{ borderLeft: '4px solid var(--danger)' }}>
+          <div className="text-muted mb-2 flex items-center gap-2"><AlertCircle size={18} /> Overdue</div>
+          <h2>{overdueCount}</h2>
         </div>
       </div>
 
