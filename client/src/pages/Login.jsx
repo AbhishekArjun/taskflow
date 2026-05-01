@@ -26,6 +26,7 @@ export default function Login() {
       const res = await register(username, password, role);
       if (res.success) {
         setIsLogin(true);
+        setPassword('');
         setError('Registration successful! Please login.');
       } else {
         setError(res.error);

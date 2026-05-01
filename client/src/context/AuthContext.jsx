@@ -14,7 +14,12 @@ export const AuthProvider = ({ children }) => {
       // In a real app, we might validate the token with the backend here.
       // For now, we'll extract the payload if possible.
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const payload = JSON.parse(jsonPayload);
         setUser({
           id: payload.id,
           username: payload.username,
